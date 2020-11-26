@@ -1,7 +1,8 @@
 # Theta Integration for SpaceRay
 Theta batching for SpaceRay package in order to submit Cobalt jobs and run spaces on different GPU nodes. 
 
-###
+### Installation
+
 
 ### In order to use:
 - In order to use this package on ThetaGPU, you need two things:
@@ -21,6 +22,7 @@ Theta batching for SpaceRay package in order to submit Cobalt jobs and run space
  
  ### see ray tune docs for more info on how to define objective function and report metrics to ray tune
  def objective_func(config):
+     ### function training and testing using config from tune.run, then report results
      model.train()
      res = model.test()
      res_dict = {}
