@@ -9,7 +9,7 @@ with open('README.md') as f:
 setuptools.setup(
     author="Max Zvyagin",
     author_email="max.zvyagin7@gmail.com",
-    name='theta_spaceray',
+    name='thetaspaceray',
     license="MIT",
     description='Integration of HyperSpace with Ray Tune search automation.',
     version='v0.0.1',
