@@ -84,10 +84,10 @@ def run_single(s, mode="max", metric="average_res",
           + args.out)
 
 
-def run(func, args):
+def run(args, func):
     """Given objective function and experiment parameters, run spaceray on ThetaGPU"""
     spaces = create_pickles(func, args)
-    space_chunks = chunks(list(range(len(spaces))), args.nodes)
+    space_chunks = chunks(list(range(len(spaces))), int(args.nodes))
     # given these space chunks, run in singularity container on GPU node with 12 hr timelimit
     for chunk in space_chunks:
         submit_job(chunk, args)
