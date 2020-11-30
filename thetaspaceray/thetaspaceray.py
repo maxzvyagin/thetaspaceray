@@ -8,15 +8,18 @@ from skopt import Optimizer
 import dill
 
 def create_pickles(func, args):
-    f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/hyperres_pickled_func", "wb")
+    f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_func", "wb")
     dill.dump(func, f)
     f.close()
     space, bounds = spaceray.get_trials(args)
-    f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/hyperres_pickled_spaces", "wb")
+    f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_spaces", "wb")
     pickle.dump(space, f)
     f.close()
-    f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/hyperres_pickled_bounds", "wb")
+    f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_bounds", "wb")
     pickle.dump(bounds, f)
+    f.close()
+    f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_args", "wb")
+    pickle.dump(args, f)
     f.close()
     return space
 
@@ -47,7 +50,7 @@ def submit_job(chunk, args):
 
 def run_single(s, mode="max", metric="average_res",
                ray_dir="/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/ray_results"):
-    f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/hyperres_pickled_args", "rb")
+    f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_args", "rb")
     args = pickle.load(f)
     if args.mode:
         mode = args.mode
@@ -56,13 +59,13 @@ def run_single(s, mode="max", metric="average_res",
     if args.ray_dir:
         ray_dir = args.ray_dir
     f.close()
-    f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/hyperres_pickled_spaces", "rb")
+    f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_spaces", "rb")
     hyperspaces = pickle.load(f)
     f.close()
-    f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/hyperres_pickled_bounds", "rb")
+    f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_bounds", "rb")
     bounds = pickle.load(f)
     f.close()
-    f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/hyperres_pickled_func", "rb")
+    f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_func", "rb")
     func = dill.load(f)
     f.close()
     for i in s:
@@ -73,14 +76,14 @@ def run_single(s, mode="max", metric="average_res",
             analysis = tune.run(func, search_alg=search_algo, num_samples=args.trials,
                                 resources_per_trial={'cpu': 25, 'gpu': 1},
                                 local_dir=ray_dir)
-        df = analysis.results_df
-        df_name = "/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/thetaspaceray/" + args.out + "/"
-        df_name += "space_"
-        df_name += str(i)
-        df_name += ".csv"
-        df.to_csv(df_name)
-        print("Finished space " + str(i))
-    print("Finished all spaces. Files written to /lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/hyper_resilient_results/"
+            df = analysis.results_df
+            df_name = "/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/thetaspaceray/" + args.out + "/"
+            df_name += "space_"
+            df_name += str(i)
+            df_name += ".csv"
+            df.to_csv(df_name)
+            print("Finished space " + str(i))
+    print("Finished all spaces. Files written to /lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/thetaspaceray/"
           + args.out)
 
 
