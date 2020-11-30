@@ -18,7 +18,7 @@ setuptools.setup(
     url='https://github.com/maxzvyagin/thetaspaceray',
     packages=setuptools.find_packages(),
     python_requires=">=3.5",
-    install_requires=['scikit-learn==0.22.1', 'scikit-optimize==0.5.2', 'ray', "ray [tune]", "hyperspaces", "spaceray"],
+    install_requires=['scikit-learn==0.22.1', 'scikit-optimize==0.5.2', 'ray', "ray [tune]", "hyperspaces", "spaceray", "dill"],
     classifiers=[
         # Trove classifiers
         # (https://pypi.python.org/pypi?%3Aaction=list_classifiers)
