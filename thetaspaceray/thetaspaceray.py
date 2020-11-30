@@ -73,18 +73,15 @@ def run_single(s, mode="max", metric="average_res",
         optimizer = Optimizer(current_space)
         search_algo = SkOptSearch(optimizer, list(bounds.keys()), metric=metric, mode=mode)
         try:
-            analysis = tune.run(func, search_alg=search_algo, num_samples=args.trials,
-                                    resources_per_trial={'cpu': 25, 'gpu': 1},
-                                    local_dir=ray_dir)
+            analysis = tune.run(func, search_alg=search_algo, num_samples=args.trials, resources_per_trial={'cpu': 25, 'gpu': 1}, local_dir=ray_dir)
             df = analysis.results_df
             df_name = "/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/thetaspaceray/" + args.out + "/"
             df_name += "space_"
             df_name += str(i)
             df_name += ".csv"
             df.to_csv(df_name)
-            # print("Finished space " + str(i))
-    # print("Finished all spaces. Files written to /lus/theta-fs0/projects/CVD-Mol-AI/"
-    #       "mzvyagin/thetaspaceray/" + args.out)
+        except:
+            print("Couldn't finish space "+str(i)+".")
 
 
 def run(args, func):
