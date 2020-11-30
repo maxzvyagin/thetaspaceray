@@ -7,6 +7,10 @@ from ray.tune.suggest.skopt import SkOptSearch
 from skopt import Optimizer
 import dill
 
+## hacky solution to run on hyperresilient code
+import sys
+sys.path.append("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/hyper_resilient_experiments")
+
 def create_pickles(func, args):
     f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_func", "wb")
     dill.dump(func, f)
