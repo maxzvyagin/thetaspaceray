@@ -36,8 +36,8 @@ def submit_job(chunk, args):
     f.write(
         "singularity shell --nv -B /lus:/lus /lus/theta-fs0/software/thetagpu/nvidia-containers/tensorflow2/tf2_20.10-py3.simg\n")
     # f.write("python /home/mzvyagin/hyper_resilient/theta_batch.py -n " + str(chunk) + "\n")
-    python_command = "import theta_spaceray;"
-    python_command += "theta_spaceray.run_single("+str(chunk)+") \n"
+    python_command = "import thetaspaceray;"
+    python_command += "thetaspaceray.run_single("+str(chunk)+") \n"
     f.write("python -c " + python_command)
     f.close()
     st = os.stat(script_name)
@@ -74,7 +74,7 @@ def run_single(s, mode="max", metric="average_res",
                                 resources_per_trial={'cpu': 25, 'gpu': 1},
                                 local_dir=ray_dir)
         df = analysis.results_df
-        df_name = "/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/theta_spaceray/" + args.out + "/"
+        df_name = "/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/thetaspaceray/" + args.out + "/"
         df_name += "space_"
         df_name += str(i)
         df_name += ".csv"

@@ -1,4 +1,4 @@
-"""Setup for the theta_spaceray package."""
+"""Setup for the thetaspaceray package."""
 
 import setuptools
 
@@ -13,9 +13,9 @@ setuptools.setup(
     license="MIT",
     long_description_content_type="text/markdown",
     description='Batched SpaceRay tuning.',
-    version='v0.0.1',
+    version='v0.0.3',
     long_description=README,
-    url='https://github.com/maxzvyagin/theta_spaceray',
+    url='https://github.com/maxzvyagin/thetaspaceray',
     packages=setuptools.find_packages(),
     python_requires=">=3.5",
     install_requires=['scikit-learn==0.22.1', 'scikit-optimize==0.5.2', 'ray', "ray [tune]", "hyperspaces", "spaceray"],
