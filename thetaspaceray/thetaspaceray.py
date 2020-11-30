@@ -53,12 +53,18 @@ def run_single(s, mode="max", metric="average_res",
                ray_dir="/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/ray_results"):
     f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_args", "rb")
     args = pickle.load(f)
-    if args.mode is not None:
+    try:
         mode = args.mode
-    if args.metric is not None:
+    except AttributeError:
+        print("Using default mode.")
+    try:
         metric = args.metric
-    if args.ray_dir is not None:
+    except AttributeError:
+        print("Using default metric average_res.")
+    try:
         ray_dir = args.ray_dir
+    except:
+        print("Using default ray tune results folder.")
     f.close()
     f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_spaces", "rb")
     hyperspaces = pickle.load(f)
