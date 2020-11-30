@@ -13,7 +13,7 @@ setuptools.setup(
     license="MIT",
     long_description_content_type="text/markdown",
     description='Batched SpaceRay tuning.',
-    version='v0.0.13',
+    version='v0.0.14',
     long_description=README,
     url='https://github.com/maxzvyagin/thetaspaceray',
     packages=setuptools.find_packages(),
