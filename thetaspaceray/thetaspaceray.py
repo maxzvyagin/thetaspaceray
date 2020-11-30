@@ -36,12 +36,13 @@ def submit_job(chunk, args):
     script_name = "/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/scripts/script" + args.out + chunk_name + ".sh"
     command = command + script_name
     f = open(script_name, "w")
+    f.write("#!/bin/bash\n")
     f.write(
         "singularity shell --nv -B /lus:/lus /lus/theta-fs0/software/thetagpu/nvidia-containers/tensorflow2/tf2_20.10-py3.simg\n")
     # f.write("python /home/mzvyagin/hyper_resilient/theta_batch.py -n " + str(chunk) + "\n")
     python_command = "import thetaspaceray;"
     python_command += "thetaspaceray.run_single("+str(chunk)+") \n"
-    f.write("python -c " + python_command)
+    f.write("python -c '" + python_command+"'")
     f.close()
     st = os.stat(script_name)
     os.chmod(script_name, st.st_mode | stat.S_IEXEC)
