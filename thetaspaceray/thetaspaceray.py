@@ -83,8 +83,8 @@ def run_single(s, mode="max", metric="average_res",
             df_name += ".csv"
             df.to_csv(df_name)
             print("Finished space " + str(i))
-    print("Finished all spaces. Files written to /lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/thetaspaceray/"
-          + args.out)
+    print("Finished all spaces. Files written to /lus/theta-fs0/projects/CVD-Mol-AI/"
+          "mzvyagin/thetaspaceray/" + args.out)
 
 
 def run(args, func):
