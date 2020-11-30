@@ -38,7 +38,7 @@ def submit_job(chunk, args):
     f = open(script_name, "w")
     f.write("#!/bin/bash\n")
     f.write(
-        "singularity shell --nv -B /lus:/lus /lus/theta-fs0/software/thetagpu/nvidia-containers/tensorflow2/tf2_20.10-py3.simg\n")
+        "'singularity shell --nv -B /lus:/lus /lus/theta-fs0/software/thetagpu/nvidia-containers/tensorflow2/tf2_20.10-py3.simg'\n")
     # f.write("python /home/mzvyagin/hyper_resilient/theta_batch.py -n " + str(chunk) + "\n")
     python_command = "import thetaspaceray;"
     python_command += "thetaspaceray.run_single("+str(chunk)+") \n"
@@ -53,11 +53,11 @@ def run_single(s, mode="max", metric="average_res",
                ray_dir="/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/ray_results"):
     f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_args", "rb")
     args = pickle.load(f)
-    if args.mode:
+    if args.mode is not None:
         mode = args.mode
-    if args.metric:
+    if args.metric is not None:
         metric = args.metric
-    if args.ray_dir:
+    if args.ray_dir is not None:
         ray_dir = args.ray_dir
     f.close()
     f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_spaces", "rb")
