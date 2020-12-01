@@ -6,6 +6,7 @@ from ray import tune
 from ray.tune.suggest.skopt import SkOptSearch
 from skopt import Optimizer
 import dill
+dill.settings['recurse'] = True
 import numpy as np
 from hyper_resilient_experiments import *
 from hyper_resilient_experiments.bi_tune import multi_train
