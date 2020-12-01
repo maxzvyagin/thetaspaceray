@@ -7,15 +7,16 @@ from ray.tune.suggest.skopt import SkOptSearch
 from skopt import Optimizer
 import dill
 dill.settings['recurse'] = True
+import cloudpickle
 import numpy as np
-from hyper_resilient_experiments import *
-from hyper_resilient_experiments.bi_tune import multi_train
-from hyper_resilient_experiments import bi_tune
+# from hyper_resilient_experiments import *
+# from hyper_resilient_experiments.bi_tune import multi_train
+# from hyper_resilient_experiments import bi_tune
 
 
 def create_pickles(func, args):
     f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_func", "wb")
-    dill.dump(func, f)
+    cloudpickle.dump(func, f)
     f.close()
     space, bounds = spaceray.get_trials(args)
     f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_spaces", "wb")
@@ -82,10 +83,10 @@ def run_single(s, mode="max", metric="average_res",
     f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_bounds", "rb")
     bounds = pickle.load(f)
     f.close()
-    func = bi_tune.multi_train
-    # f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_func", "rb")
-    # func = dill.load(f)
-    # f.close()
+    # func = bi_tune.multi_train
+    f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_func", "rb")
+    func = cloudpickle.load(f)
+    f.close()
     for i in s:
         current_space = hyperspaces[i]
         optimizer = Optimizer(current_space)
