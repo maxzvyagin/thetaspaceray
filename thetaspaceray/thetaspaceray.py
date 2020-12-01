@@ -75,9 +75,10 @@ def run_single(s, mode="max", metric="average_res",
     f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_bounds", "rb")
     bounds = pickle.load(f)
     f.close()
-    f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_func", "rb")
-    func = dill.load(f)
-    f.close()
+    func = bi_tune.multi_train
+    # f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_func", "rb")
+    # func = dill.load(f)
+    # f.close()
     for i in s:
         current_space = hyperspaces[i]
         optimizer = Optimizer(current_space)
