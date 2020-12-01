@@ -10,8 +10,8 @@ dill.settings['recurse'] = True
 import cloudpickle
 import numpy as np
 # from hyper_resilient_experiments import *
-# from hyper_resilient_experiments.bi_tune import multi_train
-# from hyper_resilient_experiments import bi_tune
+from hyper_resilient_experiments.bi_tune import multi_train
+from hyper_resilient_experiments import bi_tune
 
 
 def create_pickles(func, args):
