@@ -6,9 +6,11 @@ from ray import tune
 from ray.tune.suggest.skopt import SkOptSearch
 from skopt import Optimizer
 import dill
+import numpy as np
 from hyper_resilient_experiments import *
 from hyper_resilient_experiments.bi_tune import multi_train
 from hyper_resilient_experiments import bi_tune
+
 
 def create_pickles(func, args):
     f = open("/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/tmp/thetaspaceray_pickled_func", "wb")
@@ -26,10 +28,14 @@ def create_pickles(func, args):
     f.close()
     return space
 
+
 def chunks(l, n):
-    """ Given a list l, split into equal chunks of length n"""
-    for i in range(0, len(l), n):
-        yield l[i:i + n]
+    """ Given a list of numbers, return splits based on number of nodes. np array split works because all inputs
+    will have length of power of 2"""
+    l = np.array(l)
+    res = np.split(l, n)
+    for i in res:
+        yield list(i)
 
 
 def submit_job(chunk, args):
@@ -44,8 +50,8 @@ def submit_job(chunk, args):
         "'singularity shell --nv -B /lus:/lus /lus/theta-fs0/software/thetagpu/nvidia-containers/tensorflow2/tf2_20.10-py3.simg'\n")
     # f.write("python /home/mzvyagin/hyper_resilient/theta_batch.py -n " + str(chunk) + "\n")
     python_command = "import thetaspaceray;"
-    python_command += "thetaspaceray.run_single("+str(chunk)+")"
-    f.write("python -c '" + python_command+"'\n")
+    python_command += "thetaspaceray.run_single(" + str(chunk) + ")"
+    f.write("python -c '" + python_command + "'\n")
     f.close()
     st = os.stat(script_name)
     os.chmod(script_name, st.st_mode | stat.S_IEXEC)
@@ -84,7 +90,8 @@ def run_single(s, mode="max", metric="average_res",
         optimizer = Optimizer(current_space)
         search_algo = SkOptSearch(optimizer, list(bounds.keys()), metric=metric, mode=mode)
         try:
-            analysis = tune.run(func, search_alg=search_algo, num_samples=int(args.trials), resources_per_trial={'cpu': 25, 'gpu': 1}, local_dir=ray_dir)
+            analysis = tune.run(func, search_alg=search_algo, num_samples=int(args.trials),
+                                resources_per_trial={'cpu': 25, 'gpu': 1}, local_dir=ray_dir)
             df = analysis.results_df
             df_name = "/lus/theta-fs0/projects/CVD-Mol-AI/mzvyagin/thetaspaceray/" + args.out + "/"
             df_name += "space_"
@@ -92,7 +99,7 @@ def run_single(s, mode="max", metric="average_res",
             df_name += ".csv"
             df.to_csv(df_name)
         except:
-            print("Couldn't finish space "+str(i)+".")
+            print("Couldn't finish space " + str(i) + ".")
 
 
 def run(args, func):
